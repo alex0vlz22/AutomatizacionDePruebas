@@ -5,17 +5,18 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
+import javax.swing.*;
 import java.time.Duration;
+import java.util.List;
 
 public class StepDefinitions {
 
@@ -123,20 +124,59 @@ public class StepDefinitions {
         image.sendKeys("C://Users//Santi//Downloads//AutomatizacionDePruebas-master//AutomatizacionDePruebas-master//src//test//resources//img//valorant.png");
         //archivo.click();
 
-        //se pone codigo promocional
-        //WebElement code = driver.findElement(By.cssSelector("div[Class*='CustomerInfo__dropzone-box___27VMo']"));
-        //code.sendKeys("3153478630");
-
-
-
     }
 
     @And("pongo un codigo de descuento")
-    public void pongoUnCodigoDeDescuento() {
+    public void pongoUnCodigoDeDescuento() throws InterruptedException {
+        Thread.sleep(3000);
+
+        //se pone codigo promocional
+        WebElement code = driver.findElement(By.xpath("(//input)[15]"));
+        code.sendKeys("12345");
+
+        //se da click en el botton apply
+        WebElement applyButton = driver.findElement(By.xpath("(//button)[10]"));
+        applyButton.click();
+
+        // se pone check div[Class*='theme__check___2B20W ']
+      //WebElement check = driver.findElement(By.cssSelector("div[Class*='theme__check___2B20W']"));
+       // check.click();
 
     }
 
     @Then("El carrito aparecerá con tu compra")
     public void elCarritoApareceraConTuCompra() {
+    }
+
+    @And("Seleccionar el precio “{int}”")
+    public void seleccionarElPrecio(int arg0) throws InterruptedException {
+        Thread.sleep(1000); // esto es como un timeout
+        WebElement progressBar = driver.findElement(By.xpath("(//input)[8]"));
+        Thread.sleep(1000);
+        progressBar.clear();
+        Thread.sleep(1000);
+        //JavascriptExecutor jse = (JavascriptExecutor)driver;
+        //jse.executeScript("arguments[0].value='623';", progressBar);
+        progressBar.sendKeys("623");
+        /*
+        progressBar.clear();
+        // you can use any locator
+        JavascriptExecutor jse = (JavascriptExecutor)driver;
+        progressBar.sendKeys("623");
+        jse.executeScript("arguments[0].value='623';", progressBar);
+        Thread.sleep(3000);
+        //progressBar.sendKeys(Keys.TAB);
+        //driver.findElement(By.tagName("body")).click();
+        WebElement body = driver.findElement(By.xpath("(//div/h2)[2]"));
+        body.click();*/
+    }
+    @Then("Validar que los planetas listados sean de precio menor a “{int}”")
+    public void validarQueLosPlanetasListadosSeanDePrecioMenorA(int valor) {
+        List <WebElement> prices =  driver.findElements(By.cssSelector("span[Class*='price']"));
+        for (int i = 0; i < prices.size(); i++) {
+            String number = prices.get(i).getText().substring(1,4);
+            int number2 =  Integer.parseInt( number.replace(".", ","));
+           Assert.assertTrue (number2 < valor);
+        }
     }
 }
