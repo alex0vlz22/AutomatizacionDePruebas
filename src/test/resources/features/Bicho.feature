@@ -8,6 +8,7 @@ Feature: Yo como usuario necesito iniciar sesión con usuario y contraseña vál
     And Llenar el campo contraseña cómo “123”
     And Dar Clic en el botón LOGIN
     Then Validar que el usuario aparezca en la parte superior derecha
+    Then Cerrar navegador
 
 
 

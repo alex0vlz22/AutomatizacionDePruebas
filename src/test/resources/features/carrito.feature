@@ -7,3 +7,4 @@ Feature: Yo como usuario necesito agregar un viaje
     And complete todos los campos requerido
     And pongo un codigo de descuento
     Then El carrito aparecerá con tu compra
+    Then Cerrar navegador

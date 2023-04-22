@@ -127,7 +127,8 @@ public class StepDefinitions {
         WebElement archivo = driver.findElement(By.cssSelector("div[Class*='CustomerInfo__dropzone-box___27VMo']"));
         WebElement image = driver.findElement(By.cssSelector("input[type='file']"));
         //archivo.sendKeys("C://Users//Santi//Downloads//AutomatizacionDePruebas-master//AutomatizacionDePruebas-master//src//test//resources//img//valorant.png");
-        image.sendKeys("C://Users//Santi//Downloads//AutomatizacionDePruebas-master//AutomatizacionDePruebas-master//src//test//resources//img//valorant.png");
+        //image.sendKeys("C://Users//Santi//Downloads//AutomatizacionDePruebas-master//AutomatizacionDePruebas-master//src//test//resources//img//valorant.png");
+        image.sendKeys("C://Users//junio//IdeaProjects//TM-automation-framework-development//src//test//resources//img//valorant.png");
         //archivo.click();
 
     }
@@ -155,13 +156,13 @@ public class StepDefinitions {
     }
 
     @And("Seleccionar el precio “{int}”")
-    public void seleccionarElPrecio(int arg0) throws InterruptedException {
+    public void seleccionarElPrecio(int precio) throws InterruptedException {
         Thread.sleep(1000); // esto es como un timeout
         WebElement progressBar = driver.findElement(By.xpath("(//input)[8]"));
-        Thread.sleep(3000);
+        Thread.sleep(1000);
         deleteBicho();
 
-        bicho(623);
+        bicho(precio);
         progressBar.sendKeys(Keys.ENTER);
 
     }
@@ -184,10 +185,14 @@ public class StepDefinitions {
         WebElement progressBar = driver.findElement(By.xpath("(//input)[8]"));
         progressBar.clear();
         deleteBicho();
-        for (int i = 0; i < 3; i++) {
-            String bichoCaracter = String.valueOf(String.valueOf(bichoxd).charAt(i));
-            progressBar.sendKeys(bichoCaracter);
-            Thread.sleep(300);
+        for (int i = 0; i < 5; i++) {
+            try {
+                String bichoCaracter = String.valueOf(String.valueOf(bichoxd).charAt(i));
+                progressBar.sendKeys(bichoCaracter);
+                Thread.sleep(300);
+            } catch (StringIndexOutOfBoundsException e) {
+                break;
+            }
         }
     }
 
@@ -200,5 +205,11 @@ public class StepDefinitions {
             int number2 = Integer.parseInt(number.replace(".", ","));
             Assert.assertTrue(number2 < valor);
         }
+    }
+
+    @Then("Cerrar navegador")
+    public void cerrarNavegador() throws InterruptedException {
+        Thread.sleep(1000);
+        this.driver.quit();
     }
 }
