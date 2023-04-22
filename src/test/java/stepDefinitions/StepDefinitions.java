@@ -92,32 +92,6 @@ public class StepDefinitions {
         bicho.click();
     }
 
-    @And("complete todos los campos requerido")
-    public void completeTodosLosCamposRequerido() throws InterruptedException {
-        Thread.sleep(1500);
-
-        //se escribe el nombre
-        WebElement name = driver.findElement(By.xpath("(//input)[9]"));
-        name.sendKeys("Junior");
-
-        //se escribe el email
-        WebElement email = driver.findElement(By.xpath("(//input)[10]"));
-        email.sendKeys("juniorllanten@eam.edu.co");
-
-        //se escribe el securityNumber
-        WebElement securityNumber = driver.findElement(By.xpath("(//input)[11]"));
-        securityNumber.sendKeys("123-45-6789");
-
-        //se escribe el phone
-        WebElement phone = driver.findElement(By.xpath("(//input)[12]"));
-        phone.sendKeys("3153478630");
-
-        //se seleciona el archivo
-        WebElement image = driver.findElement(By.cssSelector("input[type='file']"));
-        image.sendKeys("C://Users//Santi//Downloads//AutomatizacionDePruebas-master//AutomatizacionDePruebas-master//src//test//resources//img//valorant.png");
-        //image.sendKeys("C://Users//junio//IdeaProjects//TM-automation-framework-development//src//test//resources//img//valorant.png");
-    }
-
     @And("pongo un codigo de descuento")
     public void pongoUnCodigoDeDescuento() throws InterruptedException {
         Thread.sleep(1500);
@@ -196,5 +170,30 @@ public class StepDefinitions {
     public void cerrarNavegador() throws InterruptedException {
         Thread.sleep(1000);
         this.driver.quit();
+    }
+
+    @And("completar con {string} el nombre, con {string} el correo,con {string} el securynumber,con {string} el telefono")
+    public void completarConElNombreConElCorreoConElSecurynumberConElTelefono(String namee, String eemail, String security, String phonee) throws InterruptedException {
+        Thread.sleep(1500);
+
+        //se escribe el nombre
+        WebElement name = driver.findElement(By.xpath("(//input)[9]"));
+        name.sendKeys(namee);
+
+        //se escribe el email
+        WebElement email = driver.findElement(By.xpath("(//input)[10]"));
+        email.sendKeys(eemail);
+
+        //se escribe el securityNumber
+        WebElement securityNumber = driver.findElement(By.xpath("(//input)[11]"));
+        securityNumber.sendKeys(security);
+
+        //se escribe el phone
+        WebElement phone = driver.findElement(By.xpath("(//input)[12]"));
+        phone.sendKeys(phonee);
+
+        //se seleciona el archivo
+        WebElement image = driver.findElement(By.cssSelector("input[type='file']"));
+        image.sendKeys("C://Users//Santi//Downloads//AutomatizacionDePruebas-master//AutomatizacionDePruebas-master//src//test//resources//img//valorant.png");
     }
 }
