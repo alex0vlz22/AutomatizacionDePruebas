@@ -10,33 +10,14 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterTest;
 
-import java.time.Duration;
 import java.util.List;
 
 public class StepDefinitions {
 
     private WebDriver driver;
-    private Wait<WebDriver> wait;
-
-    @FindBy(xpath = "//button[contains(text(), 'Login')]")
-    private WebElement logInButton;
-
-    @FindBy(how = How.XPATH, using = "(//button)[3]")
-    private WebElement bookButton;
-
-    @FindBy(xpath = "//span[contains(text(), 'Username')]")
-    private WebElement usernameField;
-
-    @FindBy(css = "input[type='password']")
-    private WebElement passwordField;
-
 
     @Given("Se navega hacia {string}")
     public void seNavegaHacia(String url) {
@@ -49,46 +30,54 @@ public class StepDefinitions {
         driver.get(url);
     }
 
-    private void initilizeWait() {
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-    }
-
     @When("La página ha cargado completamente")
     public void la_página_ha_cargado_completamente() {
-        //this.wait.until(ExpectedConditions.visibilityOf(this.driver.findElement(By.cssSelector("body"))));
 
     }
 
     @When("Dar Clic en el enlace del LOGIN")
     public void dar_clic_en_el_enlace_del_login() {
-        this.wait.until(ExpectedConditions.elementToBeClickable(this.logInButton));
-        this.logInButton.click();
+        this.driver.findElement(By.xpath("//button[contains(text(), 'Log in')]")).click();
 
     }
 
-    @When("Llenar el campo de usuario como “jhon”")
-    public void llenar_el_campo_de_usuario_como_jhon() {
-        this.wait.until(ExpectedConditions.visibilityOf(this.usernameField));
-        this.usernameField.sendKeys("Jhon");
-
+    @And("Llenar el campo de usuario como {string}")
+    public void llenarElCampoDeUsuarioComo(String usuario) {
+        this.driver.findElement(By.cssSelector("#login input")).sendKeys(usuario);
     }
 
-    @When("Llenar el campo contraseña cómo “{int}”")
-    public void llenar_el_campo_contraseña_cómo(Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    @And("Llenar el campo contraseña como {string}")
+    public void llenarElCampoContraseñaComo(String contrasena) {
+        this.driver.findElement(By.cssSelector("input[type=\"password\"]")).sendKeys(contrasena);
     }
 
     @When("Dar Clic en el botón LOGIN")
-    public void dar_clic_en_el_botón_login() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void dar_clic_en_el_botón_login() throws InterruptedException {
+        Thread.sleep(500);
+        this.driver.findElement(By.cssSelector("button[form='login']")).click();
     }
 
-    @Then("Validar que el usuario aparezca en la parte superior derecha")
-    public void validar_que_el_usuario_aparezca_en_la_parte_superior_derecha() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    @Then("Validar que el {string} aparezca en la parte superior derecha")
+    public void validarQueElAparezcaEnLaParteSuperiorDerecha(String usuario) throws InterruptedException {
+        Thread.sleep(500);
+        String nombreDesplegado = this.driver.findElement(By.cssSelector("ul div button span")).getText();
+        validarNombre(nombreDesplegado, usuario);
+    }
+
+    private void validarNombre(String nombreDesplegado, String usuario) {
+        for (int i = 0; i < 10; i++) {
+            if (nombreDesplegado.charAt(i) == ',') {
+                String nombreEnPantalla = nombreDesplegado.substring(i + 2, nombreDesplegado.length());
+                try {
+                    Assert.assertEquals(nombreEnPantalla, usuario.toUpperCase());
+                } catch (AssertionError ex) {
+                    ex.printStackTrace();
+                    this.driver.quit();
+                    Assert.fail();
+                }
+                break;
+            }
+        }
     }
 
     @Given("Se navega hacia “https:\\/\\/demo.testim.io\\/destinations”")
@@ -105,7 +94,7 @@ public class StepDefinitions {
 
     @And("complete todos los campos requerido")
     public void completeTodosLosCamposRequerido() throws InterruptedException {
-        Thread.sleep(3000);
+        Thread.sleep(1500);
 
         //se escribe el nombre
         WebElement name = driver.findElement(By.xpath("(//input)[9]"));
@@ -124,18 +113,14 @@ public class StepDefinitions {
         phone.sendKeys("3153478630");
 
         //se seleciona el archivo
-        WebElement archivo = driver.findElement(By.cssSelector("div[Class*='CustomerInfo__dropzone-box___27VMo']"));
         WebElement image = driver.findElement(By.cssSelector("input[type='file']"));
-        //archivo.sendKeys("C://Users//Santi//Downloads//AutomatizacionDePruebas-master//AutomatizacionDePruebas-master//src//test//resources//img//valorant.png");
-        //image.sendKeys("C://Users//Santi//Downloads//AutomatizacionDePruebas-master//AutomatizacionDePruebas-master//src//test//resources//img//valorant.png");
-        image.sendKeys("C://Users//junio//IdeaProjects//TM-automation-framework-development//src//test//resources//img//valorant.png");
-        //archivo.click();
-
+        image.sendKeys("C://Users//Santi//Downloads//AutomatizacionDePruebas-master//AutomatizacionDePruebas-master//src//test//resources//img//valorant.png");
+        //image.sendKeys("C://Users//junio//IdeaProjects//TM-automation-framework-development//src//test//resources//img//valorant.png");
     }
 
     @And("pongo un codigo de descuento")
     public void pongoUnCodigoDeDescuento() throws InterruptedException {
-        Thread.sleep(3000);
+        Thread.sleep(1500);
 
         //se pone codigo promocional
         WebElement code = driver.findElement(By.xpath("(//input)[15]"));
@@ -157,17 +142,16 @@ public class StepDefinitions {
 
     @And("Seleccionar el precio “{int}”")
     public void seleccionarElPrecio(int precio) throws InterruptedException {
-        Thread.sleep(1000); // esto es como un timeout
+        Thread.sleep(800); // Esto es un timeout
         WebElement progressBar = driver.findElement(By.xpath("(//input)[8]"));
-        Thread.sleep(1000);
-        deleteBicho();
+        Thread.sleep(500);
+        borrarPrecio();
 
-        bicho(precio);
+        escribirPrecio(precio);
         progressBar.sendKeys(Keys.ENTER);
-
     }
 
-    private void deleteBicho() {
+    private void borrarPrecio() {
         WebElement progressBar = driver.findElement(By.xpath("(//input)[8]"));
         progressBar.click();
         progressBar.sendKeys(Keys.BACK_SPACE);
@@ -181,10 +165,10 @@ public class StepDefinitions {
         progressBar.sendKeys(Keys.DELETE);
     }
 
-    public void bicho(int bichoxd) throws InterruptedException {
+    public void escribirPrecio(int bichoxd) throws InterruptedException {
         WebElement progressBar = driver.findElement(By.xpath("(//input)[8]"));
         progressBar.clear();
-        deleteBicho();
+        borrarPrecio();
         for (int i = 0; i < 5; i++) {
             try {
                 String bichoCaracter = String.valueOf(String.valueOf(bichoxd).charAt(i));
@@ -207,6 +191,7 @@ public class StepDefinitions {
         }
     }
 
+    @AfterTest
     @Then("Cerrar navegador")
     public void cerrarNavegador() throws InterruptedException {
         Thread.sleep(1000);

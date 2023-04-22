@@ -7,5 +7,5 @@ import io.cucumber.testng.CucumberOptions;
         glue = {"stepDefinitions"},
         plugin = {"pretty", "html:target/cucumber"})
 
-public class Runner3 extends AbstractTestNGCucumberTests{
+public class RunnerFiltroPrecio extends AbstractTestNGCucumberTests{
 }

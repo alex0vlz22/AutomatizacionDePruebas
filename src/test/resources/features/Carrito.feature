@@ -1,5 +1,6 @@
 Feature: Yo como usuario necesito agregar un viaje
 
+  @Carrito-001
   Scenario: Compra carrito
     Given Se navega hacia "https://demo.testim.io/destinations"
     When La página ha cargado completamente
